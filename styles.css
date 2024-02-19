@@ -1,0 +1,87 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#editor {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+
+#leftPanel {
+    width: 400px; /* Set the width of the left panel */
+    border-right: 2px solid #ccc; /* Add a border */
+    padding: 20px;
+}
+
+#toolbox {
+    width: 200px;
+    border-right: 2px solid #ccc;
+    padding: 20px;
+}
+
+#workspace {
+    flex: 1;
+    border: 2px dashed #ccc;
+    padding: 20px;
+    min-height: 200px; /* Ensures workspace is visible */
+    display: flex;
+    flex-direction: column; /* Ensures blocks stack vertically */
+    align-items: flex-start; /* Aligns blocks to start of the container */
+}
+
+.block-category {
+    margin-bottom: 20px;
+}
+
+.block-container {
+    width: auto;
+}
+
+.block {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    /* Set width to auto to fit the content */
+    width: auto;
+    /* Prevent the block from stretching to the full width */
+    max-width: fit-content;
+    white-space: nowrap;
+}
+
+#controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align buttons to the start of the container */
+    margin-top: 20px;
+}
+
+button {
+    padding: 15px 30px; /* Larger padding for buttons */
+    margin-bottom: 10px; /* Spacing between buttons */
+    cursor: pointer;
+}
+
+#leftPanel {
+    width: 400px;
+    border-right: 2px solid #ccc;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#textInput {
+    width: calc(100% - 40px); /* Subtracting padding from width */
+    height: calc(100% - 40px); /* Subtracting padding from height */
+    padding: 20px;
+    border: 1px solid #ccc;
+    resize: none; /* Disable resizing */
+    box-sizing: border-box; /* Include padding and border in total width and height */
+}
