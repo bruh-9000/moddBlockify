@@ -75,13 +75,12 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     
         workspace.appendChild(newBlock);
-    
-        // Remove the dragging class from the clone
-        const draggedBlock = document.querySelector('.dragging');
-        if (draggedBlock) {
-            draggedBlock.parentNode.removeChild(draggedBlock); // Remove the cloned block from the DOM
-        }
-    });     
+
+        // Create and append delete icon (trash can)
+        const deleteIcon = createDeleteIcon(newBlock);
+        workspace.appendChild(deleteIcon);
+        deleteIcon.addEventListener("click", handleDeleteClick);
+    });
 
     // Controls
     const generateButton = document.getElementById("generateButton");
@@ -98,4 +97,37 @@ document.addEventListener("DOMContentLoaded", function() {
         workspace.innerHTML = ""; // Clear workspace
         droppedBlocks = []; // Clear the array of dropped blocks
     });
+
+    // Function to create delete icon
+    function createDeleteIcon(block) {
+        const deleteIcon = document.createElement("span");
+        deleteIcon.innerHTML = "🗑️";
+        deleteIcon.classList.add("delete-icon");
+        deleteIcon.style.position = "absolute";
+        deleteIcon.style.top = `${block.offsetTop}px`;
+        deleteIcon.style.left = `${block.offsetLeft + block.offsetWidth + 20}px`;
+        deleteIcon.style.cursor = "pointer";
+        return deleteIcon;
+    }
+
+    // Function to handle delete icon click
+    function handleDeleteClick(event) {
+        const deleteIcon = event.target;
+        const block = deleteIcon.previousSibling;
+        const workspace = block.parentElement;
+        const remainingBlocks = Array.from(workspace.querySelectorAll('.block'));
+        
+        // Remove the block and delete icon
+        workspace.removeChild(block);
+        workspace.removeChild(deleteIcon);
+        
+        // Update the positions of remaining trash cans
+        remainingBlocks.forEach((remainingBlock, index) => {
+            const deleteIcon = remainingBlock.nextElementSibling;
+            if (deleteIcon && deleteIcon.classList.contains('delete-icon')) {
+                deleteIcon.style.left = `${remainingBlock.offsetLeft + remainingBlock.offsetWidth + 20}px`;
+                deleteIcon.style.top = `${remainingBlock.offsetTop}px`;
+            }
+        });
+    }
 });
