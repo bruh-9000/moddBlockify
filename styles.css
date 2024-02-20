@@ -85,3 +85,7 @@ button {
     resize: none; /* Disable resizing */
     box-sizing: border-box; /* Include padding and border in total width and height */
 }
+
+.reporter-block {
+    border-radius: 50%; /* Make reporter blocks oval */
+}

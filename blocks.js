@@ -13,4 +13,11 @@ const blocks = [
         color: "#CCD3CA",
         value: [`{ "type": "addChatFilter", "words": "`, `VARIABLE`, `" }`]
     },
+    {
+        name: "Report",
+        display: ["Report"],
+        type: 'Reporter',
+        color: "#CCD3CA",
+        value: [1234]
+    },
 ];

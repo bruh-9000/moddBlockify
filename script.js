@@ -10,6 +10,12 @@ document.addEventListener("DOMContentLoaded", function() {
         const blockElement = document.createElement("div");
         blockElement.textContent = block.name; // Use the 'name' property of the block object
         blockElement.classList.add("block");
+
+        // Check if the block is a reporter block and add the appropriate class
+        if (block.type === 'Reporter') {
+            blockElement.classList.add("reporter-block");
+        }
+
         blockElement.setAttribute("draggable", "true");
         blockElement.style.backgroundColor = block.color || '#f0f0f0'; // Set background color or default to #f0f0f0
         blockContainer.appendChild(blockElement);
@@ -37,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
         event.preventDefault();
     });
 
+    // When blocks are placed in the workspace
     workspace.addEventListener("drop", function(event) {
         event.preventDefault();
         const blockContent = event.dataTransfer.getData("text/plain"); // Retrieve text data
@@ -53,6 +60,11 @@ document.addEventListener("DOMContentLoaded", function() {
         newBlock.classList.add("block");
         newBlock.style.width = "auto"; // Set width to auto to fit the content
         newBlock.style.backgroundColor = blockColor; // Set the background color of the new block
+        newBlock.style.marginLeft = "30px";
+        
+        if (block.type === "Reporter") {
+            newBlock.style.borderRadius = "50%";
+        }
     
         // Create a text input element for the variable
         const variableInput = document.createElement("input");
@@ -80,6 +92,11 @@ document.addEventListener("DOMContentLoaded", function() {
         const deleteIcon = createDeleteIcon(newBlock);
         workspace.appendChild(deleteIcon);
         deleteIcon.addEventListener("click", handleDeleteClick);
+
+        // Create and append gear icon
+        const gearIcon = createGearIcon(newBlock);
+        workspace.appendChild(gearIcon);
+        gearIcon.addEventListener("click", handleGearClick);
     });
 
     // Controls
@@ -107,27 +124,59 @@ document.addEventListener("DOMContentLoaded", function() {
         deleteIcon.style.top = `${block.offsetTop}px`;
         deleteIcon.style.left = `${block.offsetLeft + block.offsetWidth + 20}px`;
         deleteIcon.style.cursor = "pointer";
+        deleteIcon.style.fontSize = "20px";
         return deleteIcon;
     }
 
-    // Function to handle delete icon click
-    function handleDeleteClick(event) {
-        const deleteIcon = event.target;
-        const block = deleteIcon.previousSibling;
-        const workspace = block.parentElement;
-        const remainingBlocks = Array.from(workspace.querySelectorAll('.block'));
-        
-        // Remove the block and delete icon
-        workspace.removeChild(block);
-        workspace.removeChild(deleteIcon);
-        
-        // Update the positions of remaining trash cans
-        remainingBlocks.forEach((remainingBlock, index) => {
-            const deleteIcon = remainingBlock.nextElementSibling;
-            if (deleteIcon && deleteIcon.classList.contains('delete-icon')) {
-                deleteIcon.style.left = `${remainingBlock.offsetLeft + remainingBlock.offsetWidth + 20}px`;
-                deleteIcon.style.top = `${remainingBlock.offsetTop}px`;
-            }
-        });
+// Function to handle delete icon click
+function handleDeleteClick(event) {
+    const deleteIcon = event.target;
+    const block = deleteIcon.previousSibling;
+    const workspace = block.parentElement;
+    const gearIcon = deleteIcon.nextSibling; // Get the gear icon
+    
+    // Remove the block, delete icon, and gear icon
+    workspace.removeChild(block);
+    workspace.removeChild(deleteIcon);
+    workspace.removeChild(gearIcon);
+    
+    // Update the positions of remaining trash cans and gears
+    const remainingBlocks = Array.from(workspace.querySelectorAll('.block'));
+    remainingBlocks.forEach((remainingBlock, index) => {
+        const deleteIcon = remainingBlock.nextElementSibling;
+        const gearIcon = deleteIcon.nextSibling;
+        if (deleteIcon && deleteIcon.classList.contains('delete-icon')) {
+            deleteIcon.style.left = `${remainingBlock.offsetLeft + remainingBlock.offsetWidth + 20}px`;
+            deleteIcon.style.top = `${remainingBlock.offsetTop}px`;
+        }
+        if (gearIcon && gearIcon.classList.contains('gear-icon')) {
+            gearIcon.style.left = `${remainingBlock.offsetLeft - 30}px`;
+            gearIcon.style.top = `${remainingBlock.offsetTop}px`;
+        }
+    });
+}
+
+    // Function to create gear icon
+    function createGearIcon(block) {
+        const gearIcon = document.createElement("span");
+        gearIcon.innerHTML = "⚙️";
+        gearIcon.classList.add("gear-icon");
+        gearIcon.style.position = "absolute";
+        gearIcon.style.top = `${block.offsetTop}px`;
+        gearIcon.style.left = `${block.offsetLeft - 30}px`;
+        gearIcon.style.cursor = "pointer";
+        gearIcon.style.fontSize = "20px";
+        return gearIcon;
     }
+
+    // Function to handle gear icon click
+    function handleGearClick(event) {
+        const gearIcon = event.target;
+        const block = gearIcon.nextSibling;
+        // Add your custom functionality here for gear icon click
+    }
+
+    workspace.appendChild(gearIcon);
+    gearIcon.addEventListener("click", handleGearClick);
+
 });
